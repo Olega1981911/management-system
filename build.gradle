@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.taco'
+version = "$version_project"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation( "org.springframework.boot:spring-boot-starter-data-jpa",
+            "org.springframework.boot:spring-boot-starter-validation",
+            "org.springframework.boot:spring-boot-starter-web",
+            "org.springframework.security:spring-security-core:$security_core",
+            "org.springframework.boot:spring-boot-starter-cache:$cache_version",
+            "org.modelmapper:modelmapper:$modelmapper_version",
+            "org.springframework.boot:spring-boot-starter-data-redis",
+            "org.springdoc:springdoc-openapi-ui:$openapi_ui"
+    )
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation(
+            'org.springframework.boot:spring-boot-starter-test',
+            'org.testcontainers:testcontainers',
+            'org.testcontainers:junit-jupiter:1.19.3',
+            'org.testcontainers:postgresql:1.19.3',
+            'com.redis.testcontainers:testcontainers-redis:1.6.4',
+            'org.mockito:mockito-core:5.8.0',
+            'org.mockito:mockito-junit-jupiter:5.8.0',
+            'org.awaitility:awaitility:4.2.0'
+    )
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    systemProperty "java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager"
+    systemProperty "testcontainers.reuse.enable", "true"
+}
