@@ -166,7 +166,7 @@ public class TransferControllerIntegrationTest {
 
         String requestBody = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/api/transfers/" + fromUserId) // Исправлено
+        mockMvc.perform(post("/api/transfers/" + fromUserId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isBadRequest());
