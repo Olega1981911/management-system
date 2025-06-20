@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -37,4 +38,17 @@ public class Transfer {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private TransferStatus status = TransferStatus.PENDING;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transfer transfer = (Transfer) o;
+        return Objects.equals(id, transfer.id) && Objects.equals(amount, transfer.amount) && Objects.equals(timestamp, transfer.timestamp) && status == transfer.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount, timestamp, status);
+    }
 }
